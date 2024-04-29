@@ -134,5 +134,28 @@ class Crypto
     {
         return openssl_random_pseudo_bytes(openssl_cipher_iv_length($algorithm));
     }
+    
+    /**
+     * Encrypt data
+     * -------------
+     * This method encrypts data using the specified algorithm and returns a base64 encoded string.
+     * @param string $data The data to encrypt
+     * @param string $algorithm The algorithm to use for encryption
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function encrypt(string $data, string $algorithm)
+    {
+        if (!self::isAlgorithmSupported($algorithm)) {
+            throw new \Exception("Your PHP version " . phpversion() . " doesn't support encryption with " . $algorithm, 400);
+        }
+        try {
+            $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($algorithm));
+            $encrypted = openssl_encrypt($data, $algorithm, self::$secretKey, OPENSSL_RAW_DATA, $iv);
+            return $iv . $encrypted;
+        } catch (\Exception $e) {
+            throw new \Exception("Encryption failed: {$e->getMessage()}", $e->getCode(), $e);
+        }
+    }
 
 }
