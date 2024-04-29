@@ -1,0 +1,111 @@
+<?php
+
+namespace Tararoutray\PhpSecurity;
+
+/**
+ * Crypto - A PHP Security Library
+ * -------------------------------
+ * This library provides a set of methods to encrypt data, decrypt data, and generate secure random passwords, and more.
+ * @author Tara Prasad Routray <https://github.com/tararoutray>
+ * @license MIT
+ * @link https://github.com/tararoutray/php-security
+ */
+class Crypto
+{
+    private $secretKey;
+
+    public const ALGO_AES_128_CBC = 'aes-128-cbc';
+    public const ALGO_AES_128_CFB = 'aes-128-cfb';
+    public const ALGO_AES_128_ECB = 'aes-128-ecb';
+    public const ALGO_AES_128_OFB = 'aes-128-ofb';
+    public const ALGO_AES_192_CBC = 'aes-192-cbc';
+    public const ALGO_AES_192_CFB = 'aes-192-cfb';
+    public const ALGO_AES_192_ECB = 'aes-192-ecb';
+    public const ALGO_AES_192_OFB = 'aes-192-ofb';
+    public const ALGO_AES_256_CBC = 'aes-256-cbc';
+    public const ALGO_AES_256_CFB = 'aes-256-cfb';
+    public const ALGO_AES_256_ECB = 'aes-256-ecb';
+    public const ALGO_AES_256_OFB = 'aes-256-ofb';
+    public const ALGO_AES_128_GCM = 'aes-128-gcm';
+    public const ALGO_AES_192_GCM = 'aes-192-gcm';
+    public const ALGO_AES_256_GCM = 'aes-256-gcm';
+    public const ALGO_CAMELLIA_128_CBC = 'camellia-128-cbc';
+    public const ALGO_CAMELLIA_128_CFB = 'camellia-128-cfb';
+    public const ALGO_CAMELLIA_128_ECB = 'camellia-128-ecb';
+    public const ALGO_CAMELLIA_128_OFB = 'camellia-128-ofb';
+    public const ALGO_CAMELLIA_192_CBC = 'camellia-192-cbc';
+    public const ALGO_CAMELLIA_192_CFB = 'camellia-192-cfb';
+    public const ALGO_CAMELLIA_192_ECB = 'camellia-192-ecb';
+    public const ALGO_CAMELLIA_192_OFB = 'camellia-192-ofb';
+    public const ALGO_CAMELLIA_256_CBC = 'camellia-256-cbc';
+    public const ALGO_CAMELLIA_256_CFB = 'camellia-256-cfb';
+    public const ALGO_CAMELLIA_256_ECB = 'camellia-256-ecb';
+    public const ALGO_CAMELLIA_256_OFB = 'camellia-256-ofb';
+    public const ALGO_CHACHA20 = 'chacha20';
+    public const ALGO_CHACHA20_POLY1305 = 'chacha20-poly1305';
+    public const ALGO_BLOWFISH_CBC = 'bf-cbc';
+    public const ALGO_BLOWFISH_CFB = 'bf-cfb';
+    public const ALGO_BLOWFISH_ECB = 'bf-ecb';
+    public const ALGO_BLOWFISH_OFB = 'bf-ofb';
+    public const ALGO_SEED_CBC = 'seed-cbc';
+    public const ALGO_SEED_CFB = 'seed-cfb';
+    public const ALGO_SEED_ECB = 'seed-ecb';
+    public const ALGO_SEED_OFB = 'seed-ofb';
+    public const ALGO_SALSA20 = 'salsa20';
+    public const ALGO_SALSA20_256_ECB = 'salsa20-256-ecb';
+    public const ALGO_SALSA20_256_CBC = 'salsa20-256-cbc';
+    public const ALGO_SALSA20_256_CFB = 'salsa20-256-cfb';
+    public const ALGO_SALSA20_256_OFB = 'salsa20-256-ofb';
+    public const ALGO_SALSA20_256_GCM = 'salsa20-256-gcm';
+    public const ALGO_RC4 = 'rc4';
+    public const ALGO_RC4_40 = 'rc4-40';
+    public const ALGO_RC4_HMAC_MD5 = 'rc4-hmac-md5';
+    public const ALGO_IDEA_CBC = 'idea-cbc';
+    public const ALGO_IDEA_CFB = 'idea-cfb';
+    public const ALGO_IDEA_ECB = 'idea-ecb';
+    public const ALGO_IDEA_OFB = 'idea-ofb';
+    public const ALGO_DES_CBC = 'des-cbc';
+    public const ALGO_DES_CFB = 'des-cfb';
+    public const ALGO_DES_ECB = 'des-ecb';
+    public const ALGO_DES_EDE = 'des-ede';
+    public const ALGO_DES_EDE_CBC = 'des-ede-cbc';
+    public const ALGO_DES_EDE_CFB = 'des-ede-cfb';
+    public const ALGO_DES_EDE_ECB = 'des-ede-ecb';
+    public const ALGO_DES_EDE_OFB = 'des-ede-ofb';
+    public const ALGO_DES_OFB = 'des-ofb';
+    public const ALGO_DESX_CBC = 'desx-cbc';
+    public const ALGO_CAST5_CBC = 'cast5-cbc';
+    public const ALGO_CAST5_CFB = 'cast5-cfb';
+    public const ALGO_CAST5_ECB = 'cast5-ecb';
+    public const ALGO_CAST5_OFB = 'cast5-ofb';
+    public const ALGO_ARCFOUR = 'rc4';
+    public const ALGO_ARCFOUR_40 = 'rc4-40';
+    public const ALGO_ARCFOUR_HMAC_MD5 = 'rc4-hmac-md5';
+
+    public const PASS_LOWERCASE_ON = true;
+    public const PASS_LOWERCASE_OFF = false;
+
+    public const PASS_UPPERCASE_ON = true;
+    public const PASS_UPPERCASE_OFF = false;
+
+    public const PASS_NUMBERS_ON = true;
+    public const PASS_NUMBERS_OFF = false;
+
+    public const PASS_SYMBOLS_ON = true;
+    public const PASS_SYMBOLS_OFF = false;
+
+    /**
+     * Create a new Crypto instance
+     * ----------------------------
+     * This method is the constructor of the class.
+     * Use it to initialize the instance with the secret key used for encryption/decryption.
+     * @param string $secretKey The secret key to use for encryption/decryption
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return void
+     */
+    public function __construct(string $secretKey)
+    {
+        $this->secretKey = $secretKey;
+    }
+
+}

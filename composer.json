@@ -1,0 +1,31 @@
+{
+    "name": "tararoutray/php-security",
+    "type": "library",
+    "description": "PHP Security - A modern and secure PHP library that provides a set of methods to encrypt data, decrypt data, generate secure random passwords, sanitize data, and much more. It is built with PHP's built-in cryptography functions and is designed to be easy to use and highly secure.",
+    "license": "MIT",
+    "keywords": [
+        "security",
+        "cryptography",
+        "encryption",
+        "decryption",
+        "random password",
+        "password generation",
+        "password security",
+        "data sanitization",
+        "input validation",
+        "secure coding practices"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tararoutray\\PhpSecurity\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tara Prasad Routray"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    }
+}
