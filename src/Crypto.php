@@ -120,5 +120,19 @@ class Crypto
     {
         self::$secretKey = $secretKey;
     }
+    
+    /**
+     * Generate a secret key
+     * ---------------------
+     * This method generates a secret key to be used for encrypting and decrypting data.
+     * for encryption/decryption of data.
+     * @param string $algorithm The algorithm to use for generating the secret key
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function generateSecretKey(string $algorithm)
+    {
+        return openssl_random_pseudo_bytes(openssl_cipher_iv_length($algorithm));
+    }
 
 }
