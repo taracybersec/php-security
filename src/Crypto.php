@@ -283,5 +283,36 @@ class Crypto
         $data = ["ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt)];
         return json_encode($data);
     }
+    
+    /**
+     * Decrypt data from CryptoJS
+     * ----------------------------
+     * This method decrypts data using the specified algorithm that supports CryptoJS libarary used by JavaScript.
+     * It returns a string that got encrypted by CryptoJS library used by JavaScript.
+     * @param string $data The data to decrypt
+     * @param string $algorithm The algorithm to use for decryption
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function decryptFromCryptoJS(string $data, string $algorithm = self::ALGO_AES_256_CBC)
+    {
+        $json = json_decode($data, true);
+        $salt = hex2bin($json["s"]);
+        $iv = hex2bin($json["iv"]);
+        $ct = base64_decode($json["ct"]);
+        $concatedPassphrase = self::$secretKey . $salt;
+        $md5 = [];
+        $md5[0] = md5($concatedPassphrase, true);
+        $result = $md5[0];
+        $i = 1;
+        while (strlen($result) < 32) {
+            $md5[$i] = md5($md5[$i - 1] . $concatedPassphrase, true);
+            $result .= $md5[$i];
+            $i++;
+        }
+        $key = substr($result, 0, 32);
+        $data = openssl_decrypt($ct, $algorithm, $key, OPENSSL_RAW_DATA, $iv);
+        return json_decode($data, true);
+    }
 
 }
