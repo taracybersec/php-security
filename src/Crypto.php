@@ -193,5 +193,17 @@ class Crypto
     {
         return in_array($algorithm, openssl_get_cipher_methods());
     }
+    
+    /**
+     * Get supported algorithms
+     * -------------------------
+     * This method returns a list of supported algorithms.
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return array
+     */
+    public static function getSupportedAlgorithms()
+    {
+        return openssl_get_cipher_methods();
+    }
 
 }
