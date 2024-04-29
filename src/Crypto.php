@@ -205,5 +205,18 @@ class Crypto
     {
         return openssl_get_cipher_methods();
     }
+    
+    /**
+     * Generate a random string
+     * ------------------------
+     * This method generates a random string of the specified length.
+     * @param int $length The length of the random string
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function generateRandomString(int $length = 32)
+    {
+        return bin2hex(openssl_random_pseudo_bytes($length / 2));
+    }
 
 }
