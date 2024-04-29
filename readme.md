@@ -138,7 +138,7 @@ $encryptedData = Crypto::decryptFromCryptoJS($data, Crypto::ALGO_AES_256_CBC);
 
 ### 1. Deep encode
 
-This method deep encodes an array of data to prevent XSS attacks by recursively encoding each element of the array. It takes an array of data and HTML-encodes every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be encoded and won't be executed as code by the browser.
+To securely clean an array of data to prevent XSS attacks, you can use the deepEncode method. This method deep encodes an array of data by recursively encoding each element of the array. It ensures that even if an attacker manages to inject malicious data into one of the elements, it will be HTML-encoded and won't be executed as code by the browser. The number of elements in the encoded data will be the same as the number of elements in the original data. The method will return an array of encoded data.
 
 ```
 use Tararoutray\PhpSecurity\Sanitize;
@@ -151,7 +151,7 @@ $request->replace($data);
 
 ### 2. Encode
 
-This method encodes an input string to prevent XSS attacks by HTML-encoding it.
+To encode an input string, you can use the encode method. It encodes an input string to prevent XSS attacks by HTML-encoding it. This means that any special HTML characters in the string, such as "<" and ">", will be replaced with their corresponding HTML entities, "&lt;" and "&gt;", making it safe to use in an HTML document. The number of characters in the encoded string will be exactly the same as the number of characters in the original string. The method will return a string.
 
 ```
 use Tararoutray\PhpSecurity\Sanitize;
@@ -162,7 +162,7 @@ $data = Sanitize::encode($data);
 
 ### 3. Deep clean
 
-This method deepClean cleans an array of data by recursively decoding each element of the array. It takes an array of data and decodes every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be decoded and won't be executed as code by the browser. Additionally, it trims the strings and strips the tags from them.
+To clean an array of data, you can use the deepClean method. This method recursively cleaning each element of the array by cleaning every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be cleaned out and won't be executed as code by the browser. Additionally, it trims the strings and strips the tags from them, making the data safe to use in your application. The number of elements in the cleaned data will be the same as the number of elements in the original data. The method will return an array of cleaned data.
 
 ```
 use Tararoutray\PhpSecurity\Sanitize;
@@ -175,7 +175,7 @@ $request->deepClean($data);
 
 ### 4. Clean
 
-This method cleans an input string by HTML-decoding it. Additionally, it trims the strings and strips the tags from them.
+To clean an input string, you can use the clean method. It removes HTML entities in the string, trims the whitespace from both ends of the string using trim, and strips the tags from the string using strip_tags. This way, even if an attacker manages to inject malicious data into the string, it will be trimmed, and tag-free, rendering it harmless.
 
 ```
 use Tararoutray\PhpSecurity\Sanitize;

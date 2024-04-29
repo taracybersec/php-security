@@ -56,7 +56,7 @@ class Sanitize
     /**
      * Deep clean
      * -----------
-     * This method deepClean cleans an array of data by recursively decoding each element of the array. It takes an array of data and decodes every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be decoded and won't be executed as code by the browser. Additionally, it trims the strings and strips the tags from them.
+     * This method cleans an array of data by recursively decoding each element of the array. It takes an array of data and decodes every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be decoded and won't be executed as code by the browser. Additionally, it trims the strings and strips the tags from them.
      * @param array $inputData
      * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @param bool $trim Set to true to trim the strings
