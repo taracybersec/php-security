@@ -179,5 +179,19 @@ class Crypto
             throw new \Exception("Decryption failed: {$e->getMessage()}", $e->getCode(), $e);
         }
     }
+    
+    /**
+     * Check if an algorithm is supported
+     * ----------------------------------
+     * This method checks if the specified encryption algorithm is supported by the current PHP version.
+     * If the algorithm is not supported, it will return false, otherwise it will return true.
+     * @param string $algorithm The algorithm to check
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return bool
+     */
+    public static function isAlgorithmSupported(string $algorithm)
+    {
+        return in_array($algorithm, openssl_get_cipher_methods());
+    }
 
 }
