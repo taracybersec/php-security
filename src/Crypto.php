@@ -197,7 +197,7 @@ class Crypto
     /**
      * Get supported algorithms
      * -------------------------
-     * This method returns a list of supported algorithms.
+     * This method returns a list of supported algorithms for your current PHP version.
      * @author Tara Prasad Routray <https://github.com/tararoutray>
      * @return array
      */
