@@ -257,5 +257,31 @@ class Crypto
         }
         return $password;
     }
+    
+    /**
+     * Encrypt data for CryptoJS
+     * -------------------------
+     * This method encrypts data using the specified algorithm that supports CryptoJS libarary used by JavaScript.
+     * It returns a JSON encoded string that supports CryptoJS library used by JavaScript.
+     * @param string $data The data to encrypt
+     * @param string $algorithm The algorithm to use for encryption
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function encryptForCryptoJS(string $data, string $algorithm = self::ALGO_AES_256_CBC)
+    {
+        $salt = openssl_random_pseudo_bytes(8);
+        $salted = '';
+        $dx = '';
+        while (strlen($salted) < 48) {
+            $dx = md5($dx . self::$secretKey . $salt, true);
+            $salted .= $dx;
+        }
+        $key = substr($salted, 0, 32);
+        $iv = substr($salted, 32, 16);
+        $encrypted_data = openssl_encrypt(json_encode($data), $algorithm, $key, OPENSSL_RAW_DATA, $iv);
+        $data = ["ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt)];
+        return json_encode($data);
+    }
 
 }
