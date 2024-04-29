@@ -6,13 +6,13 @@ PHP Security is a modern and secure PHP library that provides a set of methods t
 
 ## Features
 
-* Secure data encryption and decryption with a variety of algorithms (AES-256-CBC, AES-128-GCM, ChaCha20-Poly1305, etc.)
-* Supports both password-based and secret key encryption/decryption
-* Generate complex and secure random passwords with a wide range of characteristics (length, uppercase, lowercase, numbers, symbols)
+- Secure data encryption and decryption with a variety of algorithms (AES-256-CBC, AES-128-GCM, ChaCha20-Poly1305, etc.)
+- Supports both password-based and secret key encryption/decryption
+- Generate complex and secure random passwords with a wide range of characteristics (length, uppercase, lowercase, numbers, symbols)
 
 ## Requirements
 
-* PHP 7.2 or higher
+- PHP 7.2 or higher
 
 ## Installation
 
@@ -132,4 +132,54 @@ use Tararoutray\PhpSecurity\Crypto;
 $data = "your encrypted data";
 Crypto::setSecretKey('your_secret_key');
 $encryptedData = Crypto::decryptFromCryptoJS($data, Crypto::ALGO_AES_256_CBC);
+```
+
+## Features in Sanitize
+
+### 1. Deep encode
+
+This method deep encodes an array of data to prevent XSS attacks by recursively encoding each element of the array. It takes an array of data and HTML-encodes every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be encoded and won't be executed as code by the browser.
+
+```
+use Tararoutray\PhpSecurity\Sanitize;
+
+$data = $request->all();
+$data = Sanitize::deepEncode($data);
+
+$request->replace($data);
+```
+
+### 2. Encode
+
+This method encodes an input string to prevent XSS attacks by HTML-encoding it.
+
+```
+use Tararoutray\PhpSecurity\Sanitize;
+
+$data = "<script>alert("some data")</script> here is a script";
+$data = Sanitize::encode($data);
+```
+
+### 3. Deep clean
+
+This method deepClean cleans an array of data by recursively decoding each element of the array. It takes an array of data and decodes every element in it, regardless of its type. This way, even if an attacker manages to inject malicious data into one of the elements, it will be decoded and won't be executed as code by the browser. Additionally, it trims the strings and strips the tags from them.
+
+```
+use Tararoutray\PhpSecurity\Sanitize;
+
+$data = $request->all();
+$data = Sanitize::deepEncode($data);
+
+$request->deepClean($data);
+```
+
+### 4. Clean
+
+This method cleans an input string by HTML-decoding it. Additionally, it trims the strings and strips the tags from them.
+
+```
+use Tararoutray\PhpSecurity\Sanitize;
+
+$data = "<script>alert("some data")</script> here is a script";
+$data = Sanitize::clean($data);
 ```
