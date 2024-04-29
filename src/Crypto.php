@@ -218,5 +218,44 @@ class Crypto
     {
         return bin2hex(openssl_random_pseudo_bytes($length / 2));
     }
+    
+    /**
+     * Generate a secure random password
+     * ---------------------------------
+     * This method generates a secure random password of the specified length.
+     * @param int $length The length of the password
+     * @param bool $lowercase Whether to include lowercase characters
+     * @param bool $uppercase Whether to include uppercase characters
+     * @param bool $numbers Whether to include numbers
+     * @param bool $symbols Whether to include symbols
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function generateSecureRandomPassword(int $length = 24, bool $lowercase = self::PASS_LOWERCASE_ON, bool $uppercase = self::PASS_UPPERCASE_ON, bool $numbers = self::PASS_NUMBERS_ON, bool $symbols = self::PASS_SYMBOLS_ON)
+    {
+        $sets = [];
+        if ($lowercase) {
+            $sets[] = 'abcdefghijklmnopqrstuvwxyz';
+        }
+        if ($uppercase) {
+            $sets[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
+        if ($numbers) {
+            $sets[] = '1234567890';
+        }
+        if ($symbols) {
+            $sets[] = '!@#$%^&*()_+-=[]{}|;:",./<>?';
+        }
+        $all = '';
+        $password = '';
+        foreach ($sets as $set) {
+            $all .= $set;
+        }
+        $alphaLength = strlen($all) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $all[random_int(0, $alphaLength)];
+        }
+        return $password;
+    }
 
 }
