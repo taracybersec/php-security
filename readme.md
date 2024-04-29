@@ -24,4 +24,36 @@ Install the latest version with
 composer require tararoutray/php-security
 ```
 
+## Features
 
+### Set the secret key
+
+This method sets the secret key to be used for encrypting and decrypting data.
+
+```
+use Tararoutray\PhpSecurity\Crypto;
+
+Crypto::setSecretKey('your_secret_key');
+```
+
+### Generate a secret key
+
+To generate a secret key for encrypting and decrypting data using the specified algorithm (AES-256-CBC, etc), you can use the following method:
+
+```
+use Tararoutray\PhpSecurity\Crypto;
+
+Crypto::generateSecretKey(Crypto::ALGO_AES_256_CBC);
+```
+
+### Encrypt data
+
+To use the `encrypt` method from the library for encrypting data, follow these steps:
+
+```
+use Tararoutray\PhpSecurity\Crypto;
+
+$data = "Sensitive information";
+Crypto::setSecretKey('your_secret_key');
+$encryptedData = $crypto->encrypt($data, Crypto::ALGO_AES_256_CBC);
+```
