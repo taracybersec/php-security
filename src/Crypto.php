@@ -107,7 +107,7 @@ class Crypto
     {
         $this->secretKey = $secretKey;
     }
-    
+
     /**
      * Set the secret key
      * ------------------
@@ -120,7 +120,7 @@ class Crypto
     {
         self::$secretKey = $secretKey;
     }
-    
+
     /**
      * Generate a secret key
      * ---------------------
@@ -134,7 +134,7 @@ class Crypto
     {
         return openssl_random_pseudo_bytes(openssl_cipher_iv_length($algorithm));
     }
-    
+
     /**
      * Encrypt data
      * -------------
@@ -157,7 +157,7 @@ class Crypto
             throw new \Exception("Encryption failed: {$e->getMessage()}", $e->getCode(), $e);
         }
     }
-    
+
     /**
      * Decrypt data
      * -------------
@@ -179,7 +179,7 @@ class Crypto
             throw new \Exception("Decryption failed: {$e->getMessage()}", $e->getCode(), $e);
         }
     }
-    
+
     /**
      * Check if an algorithm is supported
      * ----------------------------------
@@ -193,7 +193,7 @@ class Crypto
     {
         return in_array($algorithm, openssl_get_cipher_methods());
     }
-    
+
     /**
      * Get supported algorithms
      * -------------------------
@@ -205,7 +205,7 @@ class Crypto
     {
         return openssl_get_cipher_methods();
     }
-    
+
     /**
      * Generate a random string
      * ------------------------
@@ -218,7 +218,7 @@ class Crypto
     {
         return bin2hex(openssl_random_pseudo_bytes($length / 2));
     }
-    
+
     /**
      * Generate a secure random password
      * ---------------------------------
@@ -257,7 +257,7 @@ class Crypto
         }
         return $password;
     }
-    
+
     /**
      * Encrypt data for CryptoJS
      * -------------------------
@@ -270,20 +270,24 @@ class Crypto
      */
     public static function encryptForCryptoJS(string $data, string $algorithm = self::ALGO_AES_256_CBC)
     {
-        $salt = openssl_random_pseudo_bytes(8);
-        $salted = '';
-        $dx = '';
-        while (strlen($salted) < 48) {
-            $dx = md5($dx . self::$secretKey . $salt, true);
-            $salted .= $dx;
+        try {
+            $saltBytes = openssl_random_pseudo_bytes(8);
+            $intermediateKeyingMaterial = '';
+            $hash = '';
+            while (strlen($intermediateKeyingMaterial) < 48) {
+                $hash = md5($hash . self::$secretKey . $saltBytes, true);
+                $intermediateKeyingMaterial .= $hash;
+            }
+            $encryptionKey = substr($intermediateKeyingMaterial, 0, 32);
+            $initializationVector = substr($intermediateKeyingMaterial, 32, 16);
+            $encryptedPayload = openssl_encrypt(json_encode($data), $algorithm, $encryptionKey, OPENSSL_RAW_DATA, $initializationVector);
+            $encryptedData = ["ct" => base64_encode($encryptedPayload), "iv" => bin2hex($initializationVector), "s" => bin2hex($saltBytes)];
+            return json_encode($encryptedData);
+        } catch (\Exception $e) {
+            throw new \Exception("Encryption failed: {$e->getMessage()}", $e->getCode(), $e);
         }
-        $key = substr($salted, 0, 32);
-        $iv = substr($salted, 32, 16);
-        $encrypted_data = openssl_encrypt(json_encode($data), $algorithm, $key, OPENSSL_RAW_DATA, $iv);
-        $data = ["ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt)];
-        return json_encode($data);
     }
-    
+
     /**
      * Decrypt data from CryptoJS
      * ----------------------------
@@ -296,23 +300,28 @@ class Crypto
      */
     public static function decryptFromCryptoJS(string $data, string $algorithm = self::ALGO_AES_256_CBC)
     {
-        $json = json_decode($data, true);
-        $salt = hex2bin($json["s"]);
-        $iv = hex2bin($json["iv"]);
-        $ct = base64_decode($json["ct"]);
-        $concatedPassphrase = self::$secretKey . $salt;
-        $md5 = [];
-        $md5[0] = md5($concatedPassphrase, true);
-        $result = $md5[0];
-        $i = 1;
-        while (strlen($result) < 32) {
-            $md5[$i] = md5($md5[$i - 1] . $concatedPassphrase, true);
-            $result .= $md5[$i];
-            $i++;
+        try {
+            $encryptedPayload = json_decode($data, true);
+            $saltBytes = hex2bin($encryptedPayload["s"]);
+            $initializationVectorBytes = hex2bin($encryptedPayload["iv"]);
+            $cipherTextBytes = base64_decode($encryptedPayload["ct"]);
+            $concatenatedSecretKeyAndSalt = self::$secretKey . $saltBytes;
+            $md5 = [];
+            $md5[0] = md5($concatenatedSecretKeyAndSalt, true);
+            $intermediateKeyingMaterial = $md5[0];
+            for ($i = 1; $i < 32; $i++) {
+                $md5[$i] = md5($md5[$i - 1] . $concatenatedSecretKeyAndSalt, true);
+                $intermediateKeyingMaterial .= $md5[$i];
+            }
+            $key = substr($intermediateKeyingMaterial, 0, 32);
+            $decryptedPayload = openssl_decrypt($cipherTextBytes, $algorithm, $key, OPENSSL_RAW_DATA, $initializationVectorBytes);
+            $decodedPayload = json_decode($decryptedPayload, true);
+            if ($decodedPayload === null) {
+                return $decryptedPayload;
+            }
+            return $decodedPayload;
+        } catch (\Exception $e) {
+            throw new \Exception("Decryption failed: {$e->getMessage()}", $e->getCode(), $e);
         }
-        $key = substr($result, 0, 32);
-        $data = openssl_decrypt($ct, $algorithm, $key, OPENSSL_RAW_DATA, $iv);
-        return json_decode($data, true);
     }
-
 }
