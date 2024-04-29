@@ -107,5 +107,18 @@ class Crypto
     {
         $this->secretKey = $secretKey;
     }
+    
+    /**
+     * Set the secret key
+     * ------------------
+     * This method sets the secret key to be used for encrypting and decrypting data.
+     * @param string $secretKey The secret key to use for encryption/decryption
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return void
+     */
+    public static function setSecretKey(string $secretKey)
+    {
+        self::$secretKey = $secretKey;
+    }
 
 }
