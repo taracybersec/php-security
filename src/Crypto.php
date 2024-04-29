@@ -157,5 +157,27 @@ class Crypto
             throw new \Exception("Encryption failed: {$e->getMessage()}", $e->getCode(), $e);
         }
     }
+    
+    /**
+     * Decrypt data
+     * -------------
+     * This method decrypts data that was encrypted using the specified algorithm and secret key using the encrypt method of this class.
+     * @param string $data The data to decrypt
+     * @param string $algorithm The algorithm to use for decryption
+     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @return string
+     */
+    public static function decrypt(string $data, string $algorithm)
+    {
+        if (!self::isAlgorithmSupported($algorithm)) {
+            throw new \Exception("Your PHP version " . phpversion() . " doesn't support decryption with " . $algorithm, 400);
+        }
+        try {
+            $iv = substr($data, 0, openssl_cipher_iv_length($algorithm));
+            return openssl_decrypt(substr($data, openssl_cipher_iv_length($algorithm)), $algorithm, self::$secretKey, OPENSSL_RAW_DATA, $iv);
+        } catch (\Exception $e) {
+            throw new \Exception("Decryption failed: {$e->getMessage()}", $e->getCode(), $e);
+        }
+    }
 
 }
