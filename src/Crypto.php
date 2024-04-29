@@ -6,9 +6,9 @@ namespace Tararoutray\PhpSecurity;
  * Crypto - A PHP Security Library
  * -------------------------------
  * This library provides a set of methods to encrypt data, decrypt data, and generate secure random passwords, and more.
- * @author Tara Prasad Routray <https://github.com/tararoutray>
+ * @author Tara Prasad Routray <https://github.com/taracybersec>
  * @license MIT
- * @link https://github.com/tararoutray/php-security
+ * @link https://github.com/taracybersec/php-security
  */
 class Crypto
 {
@@ -100,7 +100,7 @@ class Crypto
      * This method is the constructor of the class.
      * Use it to initialize the instance with the secret key used for encryption/decryption.
      * @param string $secretKey The secret key to use for encryption/decryption
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return void
      */
     public function __construct(string $secretKey)
@@ -113,7 +113,7 @@ class Crypto
      * ------------------
      * This method sets the secret key to be used for encrypting and decrypting data.
      * @param string $secretKey The secret key to use for encryption/decryption
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return void
      */
     public static function setSecretKey(string $secretKey)
@@ -127,7 +127,7 @@ class Crypto
      * This method generates a secret key to be used for encrypting and decrypting data.
      * for encryption/decryption of data.
      * @param string $algorithm The algorithm to use for generating the secret key
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function generateSecretKey(string $algorithm)
@@ -141,7 +141,7 @@ class Crypto
      * This method encrypts data using the specified algorithm and returns a base64 encoded string.
      * @param string $data The data to encrypt
      * @param string $algorithm The algorithm to use for encryption
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function encrypt(string $data, string $algorithm)
@@ -164,7 +164,7 @@ class Crypto
      * This method decrypts data that was encrypted using the specified algorithm and secret key using the encrypt method of this class.
      * @param string $data The data to decrypt
      * @param string $algorithm The algorithm to use for decryption
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function decrypt(string $data, string $algorithm)
@@ -186,7 +186,7 @@ class Crypto
      * This method checks if the specified encryption algorithm is supported by the current PHP version.
      * If the algorithm is not supported, it will return false, otherwise it will return true.
      * @param string $algorithm The algorithm to check
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return bool
      */
     public static function isAlgorithmSupported(string $algorithm)
@@ -198,7 +198,7 @@ class Crypto
      * Get supported algorithms
      * -------------------------
      * This method returns a list of supported algorithms for your current PHP version.
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return array
      */
     public static function getSupportedAlgorithms()
@@ -211,7 +211,7 @@ class Crypto
      * ------------------------
      * This method generates a random string of the specified length.
      * @param int $length The length of the random string
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function generateRandomString(int $length = 32)
@@ -228,7 +228,7 @@ class Crypto
      * @param bool $uppercase Whether to include uppercase characters
      * @param bool $numbers Whether to include numbers
      * @param bool $symbols Whether to include symbols
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function generateSecureRandomPassword(int $length = 24, bool $lowercase = self::PASS_LOWERCASE_ON, bool $uppercase = self::PASS_UPPERCASE_ON, bool $numbers = self::PASS_NUMBERS_ON, bool $symbols = self::PASS_SYMBOLS_ON)
@@ -265,7 +265,7 @@ class Crypto
      * It returns a JSON encoded string that supports CryptoJS library used by JavaScript.
      * @param string $data The data to encrypt
      * @param string $algorithm The algorithm to use for encryption
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function encryptForCryptoJS(string $data, string $algorithm = self::ALGO_AES_256_CBC)
@@ -295,7 +295,7 @@ class Crypto
      * It returns a string that got encrypted by CryptoJS library used by JavaScript.
      * @param string $data The data to decrypt
      * @param string $algorithm The algorithm to use for decryption
-     * @author Tara Prasad Routray <https://github.com/tararoutray>
+     * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return string
      */
     public static function decryptFromCryptoJS(string $data, string $algorithm = self::ALGO_AES_256_CBC)
