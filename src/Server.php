@@ -99,7 +99,4 @@ class Server
         ]);
         die;
     }
-
-    public static function 
-
 }
