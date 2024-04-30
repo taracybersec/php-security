@@ -12,9 +12,9 @@ namespace TaraCyberSec\PhpSecurity;
  */
 class Server
 {
-    private $allowedOrigins = ['*'];
+    private static $allowedOrigins = ['*'];
 
-    private $rateLimitStoragePath = __DIR__ . '/ratelimit_storage';
+    private static $rateLimitStoragePath = __DIR__ . '/ratelimit_storage';
 
     /**
      * Add security headers
