@@ -12,7 +12,7 @@ namespace TaraCyberSec\PhpSecurity;
  */
 class Crypto
 {
-    private $secretKey;
+    private static $secretKey;
 
     public const ALGO_AES_128_CBC = 'aes-128-cbc';
     public const ALGO_AES_128_CFB = 'aes-128-cfb';
@@ -103,9 +103,8 @@ class Crypto
      * @author Tara Prasad Routray <https://github.com/taracybersec>
      * @return void
      */
-    public function __construct(string $secretKey)
+    public function __construct()
     {
-        $this->secretKey = $secretKey;
     }
 
     /**
@@ -302,6 +301,9 @@ class Crypto
     {
         try {
             $encryptedPayload = json_decode($data, true);
+            if (is_null($encryptedPayload)) {
+                throw new \Exception("Invalid data. Expecting a JSON encoded string.", 400);
+            }
             $saltBytes = hex2bin($encryptedPayload["s"]);
             $initializationVectorBytes = hex2bin($encryptedPayload["iv"]);
             $cipherTextBytes = base64_decode($encryptedPayload["ct"]);
