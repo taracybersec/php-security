@@ -183,3 +183,48 @@ use Tararoutray\PhpSecurity\Sanitize;
 $data = "<script>alert("some data")</script> here is a script";
 $data = Sanitize::clean($data);
 ```
+
+## Features for Server
+
+### 1. Add security headers
+
+To add security headers to all responses, you can use the addSecurityHeaders method. It helps to prevent XSS attacks, clickjacking, and other security threats by setting the Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy, Strict-Transport-Security, and Feature-Policy headers.
+
+```
+use Tararoutray\PhpSecurity\Server;
+
+Server::addSecurityHeaders();
+```
+
+### 2. Set rate limit storage path
+
+> Optional
+
+To set the rate limit storage path, you can use the setRateLimitStoragePath method. This method sets the path where the library will store the rate limit data. The method takes a string as an argument and sets the path to the specified directory. The directory must exist and be writable by the web server. The default path is the current working directory.
+
+```
+use Tararoutray\PhpSecurity\Server;
+
+$path = __DIR__ . "/rate_limit";
+Server::setRateLimitStoragePath($path);
+```
+
+### 3. Enforce rate limiting
+
+To enforce rate limiting, this method checks if the request is within the specified rate limit. If the request is within the rate limit, it returns true. If the request is outside the rate limit, it stops the script execution and returns a json response with a 429 status code. The method takes two arguments: the maximum number of requests allowed in the interval, and the interval in seconds.
+
+```
+use Tararoutray\PhpSecurity\Server;
+
+Server::enforceRateLimiting();
+```
+
+You can customize the rate limiting defaults like this:
+
+```
+use Tararoutray\PhpSecurity\Server;
+
+$requestLimit = 200; // max requests allowed in the interval: like 200 requests per 30 seconds
+$interval = 30; // in seconds
+Server::enforceRateLimiting($requestLimit, $interval);
+```
