@@ -1,14 +1,14 @@
 <?php
 
-namespace Tararoutray\PhpSecurity;
+namespace TaraCyberSec\PhpSecurity;
 
 /**
  * Server - A PHP Security Library
  * -------------------------------
  * This library provides a set of methods to sanitize data for input validation and data sanitization.
- * @author Tara Prasad Routray <https://github.com/tararoutray>
+ * @author Tara Prasad Routray <https://github.com/taracybersec>
  * @license MIT
- * @link https://github.com/tararoutray/php-security
+ * @link https://github.com/taracybersec/php-security
  */
 class Server
 {

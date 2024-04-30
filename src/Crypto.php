@@ -1,6 +1,6 @@
 <?php
 
-namespace Tararoutray\PhpSecurity;
+namespace TaraCyberSec\PhpSecurity;
 
 /**
  * Crypto - A PHP Security Library
