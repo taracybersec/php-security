@@ -186,7 +186,13 @@ $data = Sanitize::clean($data);
 
 ### 5. Validate Uploaded Files
 
-This method validates uploaded files by scanning their content for malicious code or files, ensuring that they are safe to be uploaded into your web server.
+To validate uploaded files, you can use the validateUploadedFiles method. It validates uploaded files by scanning their content for malicious code or files, ensuring that they are safe to be uploaded into your web server. It recursively scans every file in the request body and checks if the file content is safe to be uploaded. This method helps prevent attacks such as file upload attacks and code injection attacks. It performs the following checks:
+
+- Checks if the file is a valid image, PDF, or spreadsheet file based on its MIME type.
+- Scans the file content for common malicious patterns.
+- Checks if the file is a valid file type based on the file extension.
+
+If any of these checks fail, the method adds an error message to an array of errors. The method then returns the array of errors. If the array of errors is empty, it means that all files in the request body are safe to be uploaded.
 
 ```
 use TaraCyberSec\PhpSecurity\Sanitize;
