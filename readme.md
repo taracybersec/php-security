@@ -134,6 +134,49 @@ Crypto::setSecretKey('your_secret_key');
 $encryptedData = Crypto::decryptFromCryptoJS($data, Crypto::ALGO_AES_256_CBC);
 ```
 
+Note: To make sure that your encrypted data is in compatible format while using CryptoJS, use the following steps:
+
+```
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+const encrypt = (text, key) => {
+    try {
+        return CryptoJS.AES.encrypt(JSON.stringify(text), key, {
+            format: {
+                "encrypt": function (value, password) {
+                    if (password.match(/[^\x00-\x7F]/)) {
+                        console.warn("CryptoJSAES: Your passphrase contains non ASCII characters - This is not supported. Hash your passphrase with MD5 or similar hashes to prevent those issues");
+                    }
+                    return CryptoJS.AES.encrypt(JSON.stringify(value), password, { "format": CryptoJSAesJson }).toString();
+                },
+                "decrypt": function (jsonStr, password) {
+                    if (password.match(/[^\x00-\x7F]/)) {
+                        console.warn("CryptoJSAES: Your passphrase contains non ASCII characters - This is not supported. Hash your passphrase with MD5 or similar hashes to prevent those issues");
+                    }
+                    return JSON.parse(CryptoJS.AES.decrypt(jsonStr, password, { "format": CryptoJSAesJson }).toString(CryptoJS.enc.Utf8));
+                },
+                "stringify": function (cipherParams) {
+                    var j = { "ct": cipherParams.ciphertext.toString(CryptoJS.enc.Base64) };
+                    if (cipherParams.iv) j.iv = cipherParams.iv.toString();
+                    if (cipherParams.salt) j.s = cipherParams.salt.toString();
+                    return JSON.stringify(j).replace(/\s/g, "");
+                },
+                "parse": function (jsonStr) {
+                    var j = JSON.parse(jsonStr);
+                    var cipherParams = CryptoJS.lib.CipherParams.create({ "ciphertext": CryptoJS.enc.Base64.parse(j.ct) });
+                    if (j.iv) cipherParams.iv = CryptoJS.enc.Hex.parse(j.iv);
+                    if (j.s) cipherParams.salt = CryptoJS.enc.Hex.parse(j.s);
+                    return cipherParams;
+                }
+            }
+        }).toString();
+    } catch (error) {
+        console.log(error.stack);
+        return false;
+    }
+}
+```
+
 ## Features in Sanitize
 
 ### 1. Deep encode
