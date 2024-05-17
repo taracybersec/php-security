@@ -168,9 +168,9 @@ To clean an array of data, you can use the deepClean method. This method recursi
 use TaraCyberSec\PhpSecurity\Sanitize;
 
 $data = $request->all();
-$data = Sanitize::deepEncode($data);
+$data = Sanitize::deepClean($data);
 
-$request->deepClean($data);
+$request->replace($data);
 ```
 
 ### 4. Clean
