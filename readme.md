@@ -184,6 +184,25 @@ $data = "<script>alert("some data")</script> here is a script";
 $data = Sanitize::clean($data);
 ```
 
+### 5. Validate Uploaded Files
+
+This method validates uploaded files by scanning their content for malicious code or files, ensuring that they are safe to be uploaded into your web server.
+
+```
+use TaraCyberSec\PhpSecurity\Sanitize;
+
+$errors = Sanitize::validateUploadedFiles();
+if (!empty($errors)) {
+    http_response_code(422);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'message' => $errors[0],
+        'errors' => $errors
+    ]);
+    die;
+}
+```
+
 ## Features for Server
 
 ### 1. Add security headers
